@@ -887,6 +887,7 @@ function expiryBadge(expiry) {
 }
 
 function empHasAlert(emp) {
+  if (emp.status === 'Demitido') return false;
   return (emp.docs || []).some(d => {
     if (!d.expiry) return false;
     const days = daysUntilExpiry(d.expiry);
@@ -1198,7 +1199,7 @@ function openDetail(id) {
         </div>
       </div>` : ''}
       <div class="doc-list">
-        ${(e.docs||[]).map((d,i) => {
+        ${(e.docs||[]).slice().sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).map((d,i) => {
           const tipo = extType(d.name);
           const isPdf = tipo === 'PDF';
           const expiryDisplay = d.expiry ? expiryBadge(d.expiry) : '<span style="font-size:11px;color:var(--text3)">Sem validade</span>';
